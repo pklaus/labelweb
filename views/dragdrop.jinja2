@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link href="/static/css/filedrop.css" rel="stylesheet">
+<script src="/static/js/filedrop.js"></script>
+<script>
+</script>
+
+</head>
+<body>
+
+<fieldset id="zone">
+  <legend>Drop a file inside...</legend>
+  <p>Or click here to <em>Browse</em>...</p>
+</fieldset>
+
+<script>
+
+//var options = {iframe: {url: '/upload'}}
+var options = {}
+var zone = new FileDrop('zone', options)
+
+zone.event('send', function (files) {
+  files.each(function (file) {
+    // React on successful AJAX upload:
+    file.event('done', function (xhr) {
+      // Here, 'this' points to fd.File instance.
+      alert(xhr.responseText)
+    })
+
+    file.sendTo('/upload')
+  })
+})
+
+// Successful iframe upload uses separate mechanism
+// from proper AJAX upload hence another listener:
+zone.event('iframeDone', function (xhr) {
+  alert(xhr.responseText)
+})
+
+</script>
+
+</body>
+</html>
