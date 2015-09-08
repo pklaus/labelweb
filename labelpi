@@ -6,10 +6,12 @@ import argparse
 from app import LabelPi
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--debug', action='store_true', help='')
+parser.add_argument('--server', help='Server to use.')
+parser.add_argument('--debug', action='store_true', help='Enable debugging mode')
 args = parser.parse_args()
 
 if args.debug: logging.basicConfig(level=logging.DEBUG)
+server = args.server or ('wsgiref' if args.debug else 'cherrypy')
 
-LabelPi().run()
+LabelPi().run(debug=args.debug, server=server)
 

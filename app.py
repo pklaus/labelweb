@@ -31,14 +31,17 @@ class LabelPi(bottle.Bottle):
         return {}
 
     def _upload(self):
-        total_len = 0
+        bufsize = 1024
+        actread, maxread = 0, max(0, bottle.request.content_length)
+        if maxread > self.MAX_FILESIZE: bottle.abort(500, 'file bigger than MAX_FILESIZE')
         with open(self.TMP_FILE, 'wb') as tmp_file:
-            data = bottle.request.body.read()
-            if data == b'': bottle.abort(500, 'expected a file payload')
-            total_len += len(data)
-            if total_len > self.MAX_FILESIZE: bottle.abort(500, 'MAX_FILESIZE reached')
-            tmp_file.write(data)
-        return {'total_len': total_len}
+            while actread < maxread:
+                part = bottle.request.environ['wsgi.input'].read(min(maxread - actread, bufsize))
+                if not part: break
+                actread += len(part)
+                tmp_file.write(part)
+        if actread == 0: bottle.abort(500, 'expecting a file payload')
+        return {'total_length': actread}
 
     def _serve_static(self, filename):
         return bottle.static_file(filename, root=os.path.join(PATH, 'static'))

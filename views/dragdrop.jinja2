@@ -16,9 +16,7 @@
 
 <script>
 
-//var options = {iframe: {url: '/upload'}}
-var options = {}
-var zone = new FileDrop('zone', options)
+var zone = new FileDrop('zone', {})
 
 zone.event('send', function (files) {
   files.each(function (file) {
@@ -26,6 +24,10 @@ zone.event('send', function (files) {
     file.event('done', function (xhr) {
       // Here, 'this' points to fd.File instance.
       alert(xhr.responseText)
+    })
+    // Listen for errors:
+    file.event('error', function (e, xhr) {
+      alert(xhr.status + ', ' + xhr.statusText)
     })
 
     file.sendTo('/upload')
