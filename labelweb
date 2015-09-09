@@ -3,7 +3,7 @@
 import logging
 import argparse
 
-from app import LabelPi
+from app import LabelWeb
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--server', help='Server to use.')
@@ -13,5 +13,5 @@ args = parser.parse_args()
 if args.debug: logging.basicConfig(level=logging.DEBUG)
 server = args.server or ('wsgiref' if args.debug else 'cherrypy')
 
-LabelPi().run(debug=args.debug, server=server)
+LabelWeb().run(debug=args.debug, server=server)
 
