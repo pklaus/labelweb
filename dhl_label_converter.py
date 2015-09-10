@@ -5,6 +5,9 @@ DHL Label Converter –
 
 Convert DHL PDF shipping labels to a size
 suitable for Dymo or Brother label printers.
+
+This software requires ImageMagick to be
+installed and available in your PATH.
 """
 
 import subprocess
