@@ -25,7 +25,7 @@ def render(pdf_filename):
     num_pages = len(sizes)
 
     # render pages
-    cmd = "convert -quality 05 -density {res}x{res} {pdf} single%03d.png"
+    cmd = "convert -quality 00 -density {res}x{res} {pdf} single%03d.png"
     cmd = cmd.format(pdf=pdf_filename, res=resolution)
     cmd = cmd.split()
     try:
