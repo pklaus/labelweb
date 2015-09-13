@@ -5,6 +5,7 @@ DHL Label Converter –
 
 Convert DHL PDF shipping labels to a size
 suitable for Dymo or Brother label printers.
+The label size will be 59 mm x 144 mm.
 
 This software requires ImageMagick to be
 installed and available in your PATH.
@@ -32,7 +33,7 @@ def convert(pdf_filename):
             subprocess.check_call(cmd, cwd=wd)
         except subprocess.CalledProcessError as e:
             raise NameError('Could not convert the PDF file: ' + str(e))
-    return os.path.join(wd, 'out.png')
+    return os.path.join(wd, 'out.pdf')
 
 if __name__ == "__main__":
     import argparse
