@@ -25,7 +25,7 @@ def cmd_line_to_args(cmd_line):
 def render(pdf_filename):
     ret = {'success': False, 'pages': [], 'pdf': pdf_filename}
     wd = '/tmp'
-    resolution = 72
+    density = 72
 
     # get info on pages
     cmd = 'identify -verbose "{pdf}"'
@@ -46,17 +46,17 @@ def render(pdf_filename):
 
     # render pages
     cmd = """
-    convert             \
-       -verbose         \
-       -density {res}   \
-       -quality 00      \
-       "{pdf}"          \
-       -background white\
-       -alpha remove    \
-       -sharpen 0x1.0   \
+    convert               \
+       -verbose           \
+       -density {density} \
+       -quality 00        \
+       "{pdf}"            \
+       -background white  \
+       -alpha remove      \
+       -sharpen 0x1.0     \
         "{outfile_tpl}"
     """.replace('\n', ' ')
-    cmd = cmd.format(pdf=pdf_filename, res=resolution, outfile_tpl='single%03d.png')
+    cmd = cmd.format(pdf=pdf_filename, density=density, outfile_tpl='single%03d.png')
     args = cmd_line_to_args(cmd)
     logger.debug(cmd)
     logger.debug(str(args))
