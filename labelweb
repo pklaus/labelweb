@@ -8,10 +8,11 @@ from app import LabelWeb
 parser = argparse.ArgumentParser()
 parser.add_argument('--server', help='Server to use.')
 parser.add_argument('--debug', action='store_true', help='Enable debugging mode')
+parser.add_argument('--port', type=int, default=7777, help='The port to listen on')
 args = parser.parse_args()
 
 if args.debug: logging.basicConfig(level=logging.DEBUG)
 server = args.server or ('wsgiref' if args.debug else 'cherrypy')
 
-LabelWeb().run(debug=args.debug, server=server)
+LabelWeb().run(debug=args.debug, server=server, port=args.port)
 
