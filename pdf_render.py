@@ -28,8 +28,8 @@ def render(pdf_filename):
     density = 72
 
     # get info on pages
-    cmd = 'identify -verbose "{pdf}"'
-    cmd = cmd.format(pdf=pdf_filename)
+    cmd = 'gm identify -verbose -density {density} "{pdf}"'
+    cmd = cmd.format(pdf=pdf_filename, density=density)
     args = cmd_line_to_args(cmd)
     logger.debug(cmd)
     logger.debug(str(args))
@@ -38,23 +38,22 @@ def render(pdf_filename):
     except subprocess.CalledProcessError as e:
         logger.error("Running the command '{}' failed with the return code {}.".format(cmd, e.returncode))
         return ret
-    size_matcher = re.compile(r'\s*Print size:\s+(?P<size>(\d+(\.\d*)?)x(\d+(\.\d*)?))\s*')
+    size_matcher = re.compile(r'\s*Geometry:\s+(?P<size>(\d+(\.\d*)?)x(\d+(\.\d*)?))')
     sizes = [match[0].split('x') for match in size_matcher.findall(info_text)]
     sizes = [(float(size[0]), float(size[1])) for size in sizes] # parse floats
-    sizes = [(size[0] * 25.4, size[1] * 25.4) for size in sizes] # inch to mm
+    sizes = [(size[0] / density * 25.4, size[1] / density * 25.4) for size in sizes] # dots to mm
     num_pages = len(sizes)
 
     # render pages
     cmd = """
-    convert               \
+    gm convert            \
        -verbose           \
        -density {density} \
        -quality 00        \
-       "{pdf}"            \
-       -background white  \
-       -alpha remove      \
        -sharpen 0x1.0     \
-        "{outfile_tpl}"
+       +adjoin            \
+       "{pdf}"            \
+       "{outfile_tpl}"
     """.replace('\n', ' ')
     cmd = cmd.format(pdf=pdf_filename, density=density, outfile_tpl='single%03d.png')
     args = cmd_line_to_args(cmd)
