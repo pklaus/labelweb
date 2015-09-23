@@ -39,10 +39,10 @@ def render(pdf_filename):
         logger.error("Running the command '{}' failed with the return code {}.".format(cmd, e.returncode))
         return ret
     size_matcher = re.compile(r'\s*Geometry:\s+(?P<size>(\d+(\.\d*)?)x(\d+(\.\d*)?))')
-    sizes = [match[0].split('x') for match in size_matcher.findall(info_text)]
-    sizes = [(float(size[0]), float(size[1])) for size in sizes] # parse floats
-    sizes = [(size[0] / density * 25.4, size[1] / density * 25.4) for size in sizes] # dots to mm
-    num_pages = len(sizes)
+    page_sizes = [match[0].split('x') for match in size_matcher.findall(info_text)]
+    page_sizes = [(float(size[0]), float(size[1])) for size in page_sizes] # parse floats
+    page_sizes = [(size[0] / density * 25.4, size[1] / density * 25.4) for size in page_sizes] # dots to mm
+    num_pages = len(page_sizes)
 
     # render pages
     cmd = """
@@ -66,7 +66,7 @@ def render(pdf_filename):
         return ret
     for i in range(num_pages):
         img_file = os.path.join(wd, 'single{:03d}.png'.format(i))
-        ret['pages'].append({'size': sizes[i], 'img_file': img_file})
+        ret['pages'].append({'size': page_sizes[i], 'img_file': img_file})
     ret['success'] = True
 
     return ret
