@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-DHL Label Converter –
+DHL Label Converter -
 
 Convert DHL PDF shipping labels to a size
 suitable for Dymo or Brother label printers.
