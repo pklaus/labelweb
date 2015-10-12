@@ -5,7 +5,7 @@ Amazon DHL Label Converter -
 
 Convert Amazon DHL shipping labels to a size
 suitable for Dymo or Brother label printers.
-The label size will be 59 mm x 148 mm.
+The label size will be 62 mm x 128 mm.
 
 This software requires ImageMagick to be
 installed and available in your PATH.
