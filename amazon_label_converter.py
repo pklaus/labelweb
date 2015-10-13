@@ -5,10 +5,12 @@ Amazon DHL Label Converter -
 
 Convert Amazon DHL shipping labels to a size
 suitable for Dymo or Brother label printers.
-The label size will be 62 mm x 128 mm.
+The label can be printed with 100% scaling
+on a page size of 62 mm x 152 mm (of endless
+62mm label rolls by Brother for example).
 
-This software requires ImageMagick to be
-installed and available in your PATH.
+This software requires ImageMagick and pdfimages
+to be installed and available in your PATH.
 """
 
 import subprocess, re, os, logging
@@ -30,13 +32,13 @@ def convert(filename):
     else:
         raise NotImplementedError()
     cmds += [
-      'convert -rotate 90 -crop 800x270+0+30 "{input_file}" a.png',
-      'convert -rotate 90 -crop 800x350+180+350 "{input_file}" b.png',
-      'convert -rotate 90 -crop 800x350+0+700 "{input_file}" c.png',
-      'convert -rotate 90 -crop 680x450+0+1050 "{input_file}" d.png',
-      'convert -rotate 90 -crop 1000x300+100+1450 -resize 800 "{input_file}" e.png',
+      'convert -rotate 90 -crop 700x300+50+0 "{input_file}" a.png',
+      'convert -rotate 90 -crop 700x350+230+350 "{input_file}" b.png',
+      'convert -rotate 90 -crop 700x350+00+700 "{input_file}" c.png',
+      'convert -rotate 90 -crop 650x450+0+1050 "{input_file}" d.png',
+      'convert -rotate 90 -crop 900x350+150+1450 -resize 700 "{input_file}" e.png',
       'convert -append -gravity Center +repage a.png b.png c.png d.png e.png output.png',
-      'convert -density 330 -set units PixelsPerInch output.png output.pdf',
+      'convert -density 288 -set units PixelsPerInch output.png output.pdf',
     ]
     for cmd in cmds:
         cmd = cmd.format(input_file=input_file, pdf_file=filename)
