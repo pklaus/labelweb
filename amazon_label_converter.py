@@ -20,8 +20,6 @@ from helpers import cmd_line_to_args
 logger = logging.getLogger(name=__name__)
 
 def convert(filename):
-    wd = '/tmp'
-    resolution = 300
     cmds = []
     input_file = filename
     if filename.endswith('.pdf'):
@@ -45,7 +43,7 @@ def convert(filename):
         cmd = cmd_line_to_args(cmd)
         try:
             logger.debug('running the following command: ' + ' '.join(cmd))
-            subprocess.check_call(cmd, cwd=wd)
+            subprocess.check_call(cmd, cwd='/tmp')
         except subprocess.CalledProcessError as e:
             raise NameError('Could not convert the PDF file: ' + str(e))
     return os.path.join(wd, 'output.pdf')
