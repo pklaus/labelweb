@@ -20,6 +20,7 @@ from helpers import cmd_line_to_args
 logger = logging.getLogger(name=__name__)
 
 def convert(filename):
+    wd = '/tmp'
     cmds = []
     input_file = filename
     if filename.endswith('.pdf'):
@@ -35,7 +36,7 @@ def convert(filename):
       'convert -rotate 90 -crop 700x350+00+700 "{input_file}" c.png',
       'convert -rotate 90 -crop 650x450+0+1050 "{input_file}" d.png',
       'convert -rotate 90 -crop 900x350+150+1450 -resize 700 "{input_file}" e.png',
-      'convert -append -gravity Center +repage a.png b.png c.png d.png e.png output.png',
+      'convert -append -gravity Center -background white +repage a.png b.png c.png d.png e.png output.png',
       'convert -density 288 -set units PixelsPerInch output.png output.pdf',
     ]
     for cmd in cmds:
@@ -43,7 +44,7 @@ def convert(filename):
         cmd = cmd_line_to_args(cmd)
         try:
             logger.debug('running the following command: ' + ' '.join(cmd))
-            subprocess.check_call(cmd, cwd='/tmp')
+            subprocess.check_call(cmd, cwd=wd)
         except subprocess.CalledProcessError as e:
             raise NameError('Could not convert the PDF file: ' + str(e))
     return os.path.join(wd, 'output.pdf')
