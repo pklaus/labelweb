@@ -9,10 +9,9 @@ from helpers import cmd_line_to_args
 
 logger = logging.getLogger(__name__)
 
-def render(pdf_filename):
+def render(pdf_filename, wd='/tmp', density = 72):
+
     ret = {'success': False, 'pages': [], 'pdf': pdf_filename}
-    wd = '/tmp'
-    density = 72
 
     # get info on pages
     cmd = 'gm identify -verbose -density {density} "{pdf}"'
@@ -70,6 +69,6 @@ if __name__ == "__main__":
         logging.basicConfig(level=logging.INFO)
     results = {'conversions': []}
     for pdf_filename in args.pdf_filename:
-        results['conversions'].append(render(pdf_filename))
+        results['conversions'].append(render(pdf_filename, wd=os.getcwd()))
     pprint.pprint(results)
 
