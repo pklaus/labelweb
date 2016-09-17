@@ -15,20 +15,22 @@ import subprocess
 import re
 import os
 
+from helpers import cmd_line_to_args
+
 def convert(pdf_filename):
     wd = '/tmp'
     resolution = 300
     cmds = [
-      "convert -rotate 90 -crop 1170x688+1658+160 -quality 00 -density 270 {input_file} A.png",
-      "convert -rotate 90 -crop  810x115+1700+850 -quality 00 -density 270 {input_file} B.png",
-      "convert -rotate 90 -crop 560x696+1815+1207 -quality 00 -density 250 {input_file} C.png",
-      "composite -geometry +49+575 B.png A.png AB.png",
-      "convert +append +repage AB.png C.png out.png",
-      "convert -density 300 out.png out.pdf"
+      'convert -rotate 90 -crop 1170x688+1658+160 -quality 00 -density 270 "{input_file}" A.png',
+      'convert -rotate 90 -crop  810x115+1700+850 -quality 00 -density 270 "{input_file}" B.png',
+      'convert -rotate 90 -crop 560x696+1815+1207 -quality 00 -density 250 "{input_file}" C.png',
+      'composite -geometry +49+575 B.png A.png AB.png',
+      'convert +append +repage AB.png C.png out.png',
+      'convert -density 300 out.png out.pdf',
     ]
     for cmd in cmds:
         cmd = cmd.format(input_file=pdf_filename)
-        cmd = cmd.split()
+        cmd = cmd_line_to_args(cmd)
         try:
             subprocess.check_call(cmd, cwd=wd)
         except subprocess.CalledProcessError as e:
