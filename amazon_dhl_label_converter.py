@@ -31,13 +31,15 @@ def convert(filename):
     else:
         raise NotImplementedError()
     cmds += [
-      'convert -rotate 90 -crop 700x300+50+0 "{input_file}" a.png',
-      'convert -rotate 90 -crop 700x350+230+350 "{input_file}" b.png',
-      'convert -rotate 90 -crop 700x350+00+700 "{input_file}" c.png',
-      'convert -rotate 90 -crop 650x450+0+1050 "{input_file}" d.png',
-      'convert -rotate 90 -crop 900x350+150+1450 -resize 700 "{input_file}" e.png',
-      'convert -append -gravity Center -background white +repage a.png b.png c.png d.png e.png output.png',
-      'convert -density 288 -set units PixelsPerInch output.png output.pdf',
+      'convert -rotate 90 -crop 600x300+100+0 "{input_file}" a.png',
+      'convert -rotate 90 -crop 600x350+280+358 "{input_file}" b.png',
+      'convert -rotate 90 -crop 600x350+0+722 "{input_file}" c.png',
+      'convert -rotate 90 -crop 600x346+25+1124 "{input_file}" d.png',
+      'convert -rotate 90 -crop 850x350+175+1450 "{input_file}" e.png',
+      'convert -append -gravity Center -background white +repage a.png b.png ab.png',
+      'convert -append -gravity Center -background white +repage c.png d.png cd.png',
+      'convert +append -gravity Center -background white +repage ab.png cd.png e.png output.png',
+      'convert -density 300 -set units PixelsPerInch output.png output.pdf',
     ]
     for cmd in cmds:
         cmd = cmd.format(input_file=input_file, pdf_file=filename)
