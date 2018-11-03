@@ -22,6 +22,14 @@ def convert(pdf_filename, variant='normal'):
     resolution = 300
     if variant == 'normal':
         cmds = [
+          'convert -crop 1130x586+1750+168 -quality 00 -density 270 "{input_file}" A.png',
+          'convert -crop 1130x595+1750+751 -quality 00 -density 270 "{input_file}" B.png',
+          'convert -crop 1046x667+1620+1244 -quality 00 -density 250 "{input_file}" C.png',
+          'convert +append +repage A.png B.png C.png out.png',
+          'convert -density 300 out.png out.pdf',
+        ]
+    elif variant == 'old':
+        cmds = [
           'convert -rotate 90 -crop 1170x688+1658+160 -quality 00 -density 270 "{input_file}" A.png',
           'convert -rotate 90 -crop  810x115+1700+850 -quality 00 -density 270 "{input_file}" B.png',
           'convert -rotate 90 -crop 560x696+1815+1207 -quality 00 -density 250 "{input_file}" C.png',
